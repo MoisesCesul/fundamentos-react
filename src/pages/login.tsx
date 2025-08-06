@@ -2,14 +2,27 @@ import { Button, Link as ChakraLink, Field, Flex, Heading, HStack, Image, Input,
 import loginImage from "../../public/assets/logo.gif"
 import { Checkbox } from "@/components/ui/checkbox";
 import NextLink from "next/link";
-import { PasswordInput, PasswordStrengthMeter } from "@/components/ui/password-input";
-import { useState } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
+import { useForm } from "react-hook-form";
+import z, { email } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const signInFormSchema = z.object({
+  email: z.email("Digite um e-mail válido").nonempty("O e-mail é obrigatorio"),
+  password: z.string().nonempty("A senha é obrigatorio").min(8,"a senha deve ter pelo menos 8 caracteres")
+});
+
+type SignInFormData = z.infer<typeof signInFormSchema>;
+
 
 export default function Login() {
-  const [email,setEmail] = useState();
+  const { register, handleSubmit, formState:{errors}} = useForm({
+    resolver: zodResolver(signInFormSchema)
+  });
 
-  function handleSignIn(){
-    
+
+  function handleSignIn(data:SignInFormData){
+    console.log(data);
   }
 
   return (
@@ -22,28 +35,30 @@ export default function Login() {
         <Stack  >
           <Heading as={"h1"} fontSize={"3xl"} fontWeight={"bold"} color={"black"}>Entrar</Heading>
           <Text fontSize={"lg"} fontWeight={"normal"} color={"gray.400"}>Se você já membro, você pode fazer login com email e senha</Text>
-          <VStack gap={6} align={"flex-start"} mt={10}>
+          <VStack as="form" onSubmit={handleSubmit((data)=>{handleSignIn(data)})} gap={6} align={"flex-start"} mt={10}>
 
-            <Field.Root>
+            <Field.Root invalid={!!errors.email}>
               <Field.Label color={"gray.500"} font={"md"} >
                 Email <Field.RequiredIndicator />
               </Field.Label>
-              <Input type="email" h={16} colorPalette={"blue"} borderRadius={"md"} color={"black"} />
+              <Input type="email" h={16} colorPalette={"blue"} borderRadius={"md"} color={"black"} {...register("email")} />
+              <Field.ErrorText>{errors.email?.message}</Field.ErrorText>
             </Field.Root>
 
 
-            <Field.Root>
+            <Field.Root  invalid={!!errors.password} >
               <Field.Label color={"gray.500"} font={"md"}>
                 Senha <Field.RequiredIndicator />
               </Field.Label>
-              <PasswordInput h={16} colorPalette={"blue"} borderRadius={"md"} color={"black"}  />
+              <PasswordInput h={16} colorPalette={"blue"} borderRadius={"md"} color={"black"}  {...register("password") } />
+                   <Field.ErrorText>{errors.password?.message}</Field.ErrorText>
             </Field.Root>
 
 
             <Checkbox colorPalette={"blue"} color={"gray.500"} fontSize={"md"} fontWeight={"medium"}>
               Lembre-me
             </Checkbox>
-            <Button h={16} width={"100%"} colorPalette={'blue'} borderRadius={"md"} fontSize={"md"} fontWeight={"medium"}>
+            <Button h={16} width={"full"} colorPalette={'blue'} borderRadius={"md"} fontSize={"md"} fontWeight={"medium"} type="submit">
               Entrar
             </Button>
           </VStack>
