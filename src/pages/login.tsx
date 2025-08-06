@@ -3,8 +3,15 @@ import loginImage from "../../public/assets/logo.gif"
 import { Checkbox } from "@/components/ui/checkbox";
 import NextLink from "next/link";
 import { PasswordInput, PasswordStrengthMeter } from "@/components/ui/password-input";
+import { useState } from "react";
 
 export default function Login() {
+  const [email,setEmail] = useState();
+
+  function handleSignIn(){
+    
+  }
+
   return (
     <Flex w="100vw" h="100vh">
       <Flex w="50%" bg="#2C73EB" align="center" justify="center">
