@@ -6,14 +6,13 @@ import { SlMenu } from "react-icons/sl";
 import { TbHelpHexagon, TbSettingsAutomation } from "react-icons/tb";
 import { Avatar } from "@/components/ui/avatar";
 import { useColorMode } from "@/components/ui/color-mode";
-import logoLight from "../../../public/assets/logo-cesul-dark.png";
-import logoDark from "../../../public/assets/logo-cesul-white.png";
+import { Logo } from "./logo";
+
 
 
 export default function DefaultHeader() {
   const { toggleColorMode, colorMode } = useColorMode();
   const iconColor = colorMode === "dark" ? "white" : "gray";
-  const imageTheme = colorMode === "dark" ? logoDark : logoLight;
   return (
 
     <Flex
@@ -27,7 +26,7 @@ export default function DefaultHeader() {
         <IconButton variant={"ghost"} rounded={"full"}>
           <SlMenu />
         </IconButton>
-        <Image w={"130px"} src={imageTheme.src} height={"60px"} />
+        <Logo/>
       </Flex>
       <Group>
         <IconButton variant={"ghost"} rounded={"full"} >
